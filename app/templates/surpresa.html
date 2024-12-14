@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Surpresa</title>
+        <style>
+            body {
+                text-align: center;
+                font-family: Arial, sans-serif;
+                background-color:  #E0F7FF;
+            }
+            img {
+                display: block; /* Torna as imagens blocos */
+                margin-left: auto; /* Centraliza à esquerda */
+                margin-right: auto; /* Centraliza à direita */
+                width: 300px; /* Define o tamanho das imagens */
+                height: auto; /* Mantém a proporção das imagens */
+                border-radius: 15px; /* Deixa as bordas arredondadas */
+                margin-bottom: 20px; /* Adiciona espaçamento abaixo das imagens */
+            }
+            div {
+                margin-bottom: 20px; /* Espaçamento entre as datas e as imagens */
+            }
+
+            /* Estilo para as imagens lado a lado */
+            .side-by-side {
+                display: flex; /* Alinha os itens lado a lado */
+                justify-content: center; /* Centraliza o conteúdo */
+                gap: 10px; /* Espaçamento entre as imagens */
+                margin: 0; /* Remove margens ao redor do container */
+                padding: 0; /* Remove preenchimentos ao redor do container */
+            }
+            .side-by-side img {
+                width: 300px; /* Define o tamanho das imagens */
+                height: auto; /* Mantém a proporção */
+                border-radius: 15px; /* Bordas arredondadas */
+                margin: 0; /* Remove margens ao redor das imagens */
+                border: none; /* Remove bordas */
+            }
+            
+            /* Espaçamento maior entre as imagens e a data */
+            .praia-date {
+                margin-top: 30px; /* Define o espaçamento acima da data */
+            }
+        </style>
+    </head>
+    <body>
+        <h1 style="color: #ffd414;">Você é a minha luz 🌟</h1>
+        <p>Obrigado por ser você. 😊</p>
+        <p>Te amo muito! 💕</p>
+
+        <!-- Exibindo as datas e resultados -->
+        {% if results %}
+            <img src="{{ url_for('static', filename='images/fotoInicial.jpg') }}" alt="Foto beijo">
+            <div style="margin-bottom: 30px;">
+                <h3 style="color: #ff1493;">O tempo da minha felicidade:</h3>
+                <p><span style="font-size: 20px; color: #ff4500;">{{ results[0][1] }}</span></p>
+            </div>
+
+            <h3 style="color: #1ec2d8;">Nosso Praiou:</h3>
+            <div class="side-by-side">
+                <img src="{{ url_for('static', filename='images/maonorosto.jpg') }}" alt="Outra imagem romântica">
+                <img src="{{ url_for('static', filename='images/praial.jpg') }}" alt="Outra imagem romântica">
+            </div>
+            <div class="praia-date">
+                <span style="font-size: 20px; color: #ff4500;">{{ results[1][1] }}</span>
+            </div>
+
+            <h3 style="color: #147aff;">Aniversário da Lavínia</h3>
+            <img src="{{ url_for('static', filename='images/niverL.jpg') }}" alt="Aniversário Lavi">
+            <div>
+                <span style="font-size: 20px; color: #ff4500;">{{ results[2][1] }}</span>
+            </div>
+
+            <h3 style="color: #C8A2D0;">Juntinhos na cama</h3>
+            <img src="{{ url_for('static', filename='images/fotonacama.jpg') }}" alt="foto na cama">
+            <div>
+                <span style="font-size: 20px; color: #ff4500;">{{ results[3][1] }}</span>
+            </div>
+
+            <h3 style="color: #147aff;">Sapecagem</h3>
+            <img src="{{ url_for('static', filename='images/fotobanheiro.jpg') }}" alt="foto na banheiro">
+            <div>
+                <span style="font-size: 20px; color: #ff4500;">{{ results[4][1] }}</span>
+            </div>
+
+            <h3 style="color: #7FDBFF;">praiouu</h3>
+            <img src="{{ url_for('static', filename='images/praia2.jpg') }}" alt="praia 2">
+            <div>
+                <span style="font-size: 20px; color: #ff4500;">{{ results[5][1] }}</span>
+            </div>
+
+            <h3 style="color: #147aff;">Festa a fantasia</h3>
+            <img src="{{ url_for('static', filename='images/festafantasia.jpg') }}" alt="Festa fantasia">
+            <div>
+                <span style="font-size: 20px; color: #ff4500;">{{ results[6][1] }}</span> 
+            </div>
+
+            <h3 style="color: #144bff;">Sd house</h3>
+            <img src="{{ url_for('static', filename='images/fotoespelho.jpg') }}" alt="SD house">
+            <div>
+                <span style="font-size: 20px; color: #ff4500;">{{ results[7][1] }}</span>
+            </div>
+
+            <h3 style="color: #1ec2d8;">Aniversário da sua tia:</h3>
+            <img src="{{ url_for('static', filename='images/aniversário da sua tia.jpg') }}" alt="Aniversário da sua tia">
+            <div>
+                <span style="font-size: 20px; color: #ff4500;">{{ results[8][1] }}</span> 
+            </div>
+
+            <h3 style="color: #1ec2d8;">Nosso Piscinou:</h3>
+            <img src="{{ url_for('static', filename='images/piscina.jpg') }}" alt="Foto na Piscina">
+            <div>
+                <span style="font-size: 20px; color: #ff4500;">{{ results[9][1] }}</span> 
+            </div>
+
+        {% endif %}
+
+        <a href="/" style="color: #db7093; font-size: 20px;">Clique para voltar
