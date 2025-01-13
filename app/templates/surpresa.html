@@ -11,110 +11,126 @@
                 background-color:  #E0F7FF;
             }
             img {
-                display: block; /* Torna as imagens blocos */
-                margin-left: auto; /* Centraliza à esquerda */
-                margin-right: auto; /* Centraliza à direita */
-                width: 300px; /* Define o tamanho das imagens */
-                height: auto; /* Mantém a proporção das imagens */
-                border-radius: 15px; /* Deixa as bordas arredondadas */
-                margin-bottom: 20px; /* Adiciona espaçamento abaixo das imagens */
+                display: block;
+                margin-left: auto;
+                margin-right: auto;
+                width: 300px;
+                height: auto;
+                border-radius: 15px;
+                margin-bottom: 20px;
             }
             div {
-                margin-bottom: 20px; /* Espaçamento entre as datas e as imagens */
+                margin-bottom: 20px;
             }
 
-            /* Estilo para as imagens lado a lado */
             .side-by-side {
-                display: flex; /* Alinha os itens lado a lado */
-                justify-content: center; /* Centraliza o conteúdo */
-                gap: 10px; /* Espaçamento entre as imagens */
-                margin: 0; /* Remove margens ao redor do container */
-                padding: 0; /* Remove preenchimentos ao redor do container */
+                display: flex;
+                justify-content: center;
+                gap: 10px;
+                margin: 0;
+                padding: 0;
             }
             .side-by-side img {
-                width: 300px; /* Define o tamanho das imagens */
-                height: auto; /* Mantém a proporção */
-                border-radius: 15px; /* Bordas arredondadas */
-                margin: 0; /* Remove margens ao redor das imagens */
-                border: none; /* Remove bordas */
+                width: 300px;
+                height: auto;
+                border-radius: 15px;
+                margin: 0;
+                border: none;
             }
-            
-            /* Espaçamento maior entre as imagens e a data */
             .praia-date {
-                margin-top: 30px; /* Define o espaçamento acima da data */
+                margin-top: 30px;
             }
         </style>
+        <script>
+            // Função para buscar os resultados atualizados
+            function fetchResults() {
+                fetch('/surpresa-data')
+                    .then(response => response.json())
+                    .then(data => {
+                        const container = document.getElementById('results');
+                        container.innerHTML = ''; // Limpa o contêiner
+
+                        // Adiciona os resultados dinamicamente
+                        data.forEach((item, index) => {
+                            const div = document.createElement('div');
+                            div.innerHTML = `
+                                <h3 style="color: ${getColor(index)};">${getTitle(index)}</h3>
+                                ${getImage(index)}
+                                <div><span style="font-size: 20px; color: #ff4500;">${item[1]}</span></div>
+                            `;
+                            container.appendChild(div);
+                        });
+                    })
+                    .catch(error => console.error('Erro ao buscar resultados:', error));
+            }
+
+            // Atualiza os resultados a cada 1 segundos
+            setInterval(fetchResults, 1000);
+            window.onload = fetchResults;
+
+            // Função para definir os títulos dinamicamente
+            function getTitle(index) {
+                const titles = [
+                    "O tempo da minha felicidade:",
+                    "Nosso Praiou:",
+                    "Aniversário da Lavínia:",
+                    "Juntinhos na cama:",
+                    "Sapecagem:",
+                    "Praiaouu:",
+                    "Festa a fantasia:",
+                    "SD house:",
+                    "Aniversário da sua tia:",
+                    "Nosso Piscinou:" ,
+                    "Nossa primeira viagem:"
+                ];
+                return titles[index] || "";
+            }
+
+            // Função para definir as imagens dinamicamente
+            function getImage(index) {
+                const images = [
+                    "fotoInicial.jpg",
+                    "maonorosto.jpg",
+                    "niverL.jpg",
+                    "fotonacama.jpg",
+                    "fotobanheiro.jpg",
+                    "praia2.jpg",
+                    "festafantasia.jpg",
+                    "fotoespelho.jpg",
+                    "aniversário da sua tia.jpg",
+                    "piscina.jpg" ,
+                    "nossa_primeira_viagem.jpg"
+                ];
+                const filename = images[index];
+                return filename ? `<img src="/static/images/${filename}" alt="Imagem ${index + 1}">` : "";
+            }
+
+            // Função para definir as cores dinamicamente
+            function getColor(index) {
+                const colors = [
+                    "#ffd414", "#1ec2d8", "#ff1493", "#C8A2D0", "#147aff",
+                    "#7FDBFF", "#147aff", "#144bff", "#1ec2d8", "#1ec2d8"
+                ];
+                return colors[index] || "#000";
+            }
+        </script>
     </head>
     <body>
         <h1 style="color: #ffd414;">Você é a minha luz 🌟</h1>
         <p>Obrigado por ser você. 😊</p>
         <p>Te amo muito! 💕</p>
 
-        <!-- Exibindo as datas e resultados -->
-        {% if results %}
-            <img src="{{ url_for('static', filename='images/fotoInicial.jpg') }}" alt="Foto beijo">
-            <div style="margin-bottom: 30px;">
-                <h3 style="color: #ff1493;">O tempo da minha felicidade:</h3>
-                <p><span style="font-size: 20px; color: #ff4500;">{{ results[0][1] }}</span></p>
-            </div>
+        <!-- Contêiner para os resultados dinâmicos -->
+        <div id="results">
+            {% for index, result in results %}
+                <div>
+                    <h3 style="color: colors[index]  safe ;">{{ titles[index] }}</h3>
+                    <img src="{{ url_for('static', filename='images/' ~ images[index]) }}" alt="Imagem {{ index + 1 }}">
+                    <div><span style="font-size: 20px; color: #ff4500;">{{ result[1] }}</span></div>
+                </div>
+            {% endfor %}
+        </div>
 
-            <h3 style="color: #1ec2d8;">Nosso Praiou:</h3>
-            <div class="side-by-side">
-                <img src="{{ url_for('static', filename='images/maonorosto.jpg') }}" alt="Outra imagem romântica">
-                <img src="{{ url_for('static', filename='images/praial.jpg') }}" alt="Outra imagem romântica">
-            </div>
-            <div class="praia-date">
-                <span style="font-size: 20px; color: #ff4500;">{{ results[1][1] }}</span>
-            </div>
-
-            <h3 style="color: #147aff;">Aniversário da Lavínia</h3>
-            <img src="{{ url_for('static', filename='images/niverL.jpg') }}" alt="Aniversário Lavi">
-            <div>
-                <span style="font-size: 20px; color: #ff4500;">{{ results[2][1] }}</span>
-            </div>
-
-            <h3 style="color: #C8A2D0;">Juntinhos na cama</h3>
-            <img src="{{ url_for('static', filename='images/fotonacama.jpg') }}" alt="foto na cama">
-            <div>
-                <span style="font-size: 20px; color: #ff4500;">{{ results[3][1] }}</span>
-            </div>
-
-            <h3 style="color: #147aff;">Sapecagem</h3>
-            <img src="{{ url_for('static', filename='images/fotobanheiro.jpg') }}" alt="foto na banheiro">
-            <div>
-                <span style="font-size: 20px; color: #ff4500;">{{ results[4][1] }}</span>
-            </div>
-
-            <h3 style="color: #7FDBFF;">praiouu</h3>
-            <img src="{{ url_for('static', filename='images/praia2.jpg') }}" alt="praia 2">
-            <div>
-                <span style="font-size: 20px; color: #ff4500;">{{ results[5][1] }}</span>
-            </div>
-
-            <h3 style="color: #147aff;">Festa a fantasia</h3>
-            <img src="{{ url_for('static', filename='images/festafantasia.jpg') }}" alt="Festa fantasia">
-            <div>
-                <span style="font-size: 20px; color: #ff4500;">{{ results[6][1] }}</span> 
-            </div>
-
-            <h3 style="color: #144bff;">Sd house</h3>
-            <img src="{{ url_for('static', filename='images/fotoespelho.jpg') }}" alt="SD house">
-            <div>
-                <span style="font-size: 20px; color: #ff4500;">{{ results[7][1] }}</span>
-            </div>
-
-            <h3 style="color: #1ec2d8;">Aniversário da sua tia:</h3>
-            <img src="{{ url_for('static', filename='images/aniversário da sua tia.jpg') }}" alt="Aniversário da sua tia">
-            <div>
-                <span style="font-size: 20px; color: #ff4500;">{{ results[8][1] }}</span> 
-            </div>
-
-            <h3 style="color: #1ec2d8;">Nosso Piscinou:</h3>
-            <img src="{{ url_for('static', filename='images/piscina.jpg') }}" alt="Foto na Piscina">
-            <div>
-                <span style="font-size: 20px; color: #ff4500;">{{ results[9][1] }}</span> 
-            </div>
-
-        {% endif %}
-
-        <a href="/" style="color: #db7093; font-size: 20px;">Clique para voltar
+        <a href="/" style="color: #db7093; font-size: 20px;">Clique para voltar</a>
+    </body>
+</html>
