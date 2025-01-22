@@ -18,99 +18,119 @@
             border-radius: 15px;
             margin-bottom: 20px;
         }
-        div {
-            margin-bottom: 20px;
-        }
-
         .side-by-side {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-        }
-        .side-by-side img {
-            width: 300px;
-            height: auto;
-            border-radius: 15px;
-        }
+        display: flex;
+        justify-content: center;
+        gap: 8px; /* Reduz o espaçamento entre as imagens */
+    }
+    .side-by-side img {
+        width: 300px;
+        height: auto;
+        border-radius: 15px;
+        margin: 0; /* Remove margens adicionais */
+    }
         .praia-date {
-            margin-top: 30px;
+            margin-top: 10px;
         }
     </style>
     <script>
-        // Função para buscar os resultados atualizados
-        async function fetchResults() {
-            try {
-                const response = await fetch('/surpresa-data');
-                const data = await response.json();
-                const container = document.getElementById('results');
-                container.innerHTML = ''; // Limpa o contêiner
+        // Listas de títulos, imagens e cores
+        const titles = [
+            "O tempo da minha felicidade:",
+            "Nosso Praiou:",
+            "Aniversário da Lavínia:",
+            "Juntinhos na cama:",
+            "Sapecagem:",
+            "Praiaouu:",
+            "Festa a fantasia:",
+            "SD house:",
+            "Aniversário da sua tia:",
+            "Nosso Piscinou:",
+            "Nossa primeira viagem:",
+            "Sonho realizado: ",
+        ];
 
-                // Adiciona os resultados dinamicamente
-                data.forEach((item, index) => {
+        const images = [
+            "fotoInicial.jpg",
+            "maonorosto.jpg",
+            "niverL.jpg",
+            "fotonacama.jpg",
+            "fotobanheiro.jpg",
+            "praia2.jpg",
+            "festafantasia.jpg",
+            "fotoespelho.jpg",
+            "aniversário da sua tia.jpg",
+            "piscina.jpg",
+            "nossa_primeira_viagem.jpg",
+            "flores2.jpg",
+            "flores1.jpg"
+        ];
+
+        const colors = [
+            "#ffd414", "#1ec2d8", "#ff1493", "#C8A2D0", "#147aff",
+            "#7FDBFF", "#147aff", "#144bff", "#1ec2d8", "#1ec2d8"
+        ];
+
+        // Função para buscar os resultados atualizados
+        // Função para buscar os resultados atualizados
+    // Função para buscar os resultados atualizados
+    async function fetchResults() {
+        try {
+            const response = await fetch('/surpresa-data');
+            const data = await response.json();
+            const container = document.getElementById('results');
+            container.innerHTML = ''; // Limpa o contêiner
+
+            const shownIndices = new Set(); // Para rastrear imagens já exibidas
+
+            data.forEach((item) => {
+                const titleColor = colors[item.index % colors.length]; // Define a cor pelo índice
+
+                if (item.type === "side_by_side") {
+                    const [index1, index2] = item.indices;
+
+                    // Verifica se os índices já foram exibidos
+                    if (shownIndices.has(index1) || shownIndices.has(index2)) return;
+
                     const div = document.createElement('div');
                     div.innerHTML = `
-                        <h3 style="color: ${getColor(index)};">${getTitle(index)}</h3>
-                        ${getImage(index)}
-                        <div><span style="font-size: 20px; color: #ff4500;">${item[1]}</span></div>
+                        <h3 style="color: ${titleColor};">${titles[index1]}</h3>
+                        <div class="side-by-side">
+                            <img src="/static/images/${images[index1]}" alt="Imagem ${index1 + 1}">
+                            <img src="/static/images/${images[index2]}" alt="Imagem ${index2 + 1}">
+                        </div>
+                        <div class="praia-date">
+                            <span style="font-size: 18px; color: #ff4500;">${item.time}</span>
+                        </div>
                     `;
                     container.appendChild(div);
-                });
-            } catch (error) {
-                console.error('Erro ao buscar resultados:', error);
-            }
-        }
 
-        // Atualiza os resultados a cada 1 segundo
-        setInterval(fetchResults, 1000);
-        window.onload = fetchResults;
+                    // Marca os índices como exibidos
+                    shownIndices.add(index1);
+                    shownIndices.add(index2);
+                } else if (!shownIndices.has(item.index)) {
+                    const div = document.createElement('div');
+                    div.innerHTML = `
+                        <h3 style="color: ${titleColor};">${titles[item.index]}</h3>
+                        <img src="/static/images/${images[item.index]}" alt="Imagem ${item.index + 1}">
+                        <div class="praia-date">
+                            <span style="font-size: 18px; color: #ff4500;">${item.time}</span>
+                        </div>
+                    `;
+                    container.appendChild(div);
 
-        // Função para definir os títulos dinamicamente
-        function getTitle(index) {
-            const titles = [
-                "O tempo da minha felicidade:",
-                "Nosso Praiou:",
-                "Aniversário da Lavínia:",
-                "Juntinhos na cama:",
-                "Sapecagem:",
-                "Praiaouu:",
-                "Festa a fantasia:",
-                "SD house:",
-                "Aniversário da sua tia:",
-                "Nosso Piscinou:",
-                "Nossa primeira viagem:"
-            ];
-            return titles[index] || "Título Desconhecido";
+                    // Marca o índice como exibido
+                    shownIndices.add(item.index);
+                }
+            });
+        } catch (error) {
+            console.error('Erro ao buscar resultados:', error);
         }
+    }
 
-        // Função para definir as imagens dinamicamente
-        function getImage(index) {
-            const images = [
-                "fotoInicial.jpg",
-                "maonorosto.jpg",
-                "niverL.jpg",
-                "fotonacama.jpg",
-                "fotobanheiro.jpg",
-                "praia2.jpg",
-                "festafantasia.jpg",
-                "fotoespelho.jpg",
-                "aniversário_da_sua_tia.jpg",
-                "piscina.jpg",
-                "nossa_primeira_viagem.jpg"
-            ];
-            const filename = images[index];
-            return filename
-                ? `<img src="/static/images/${filename}" alt="Imagem ${index + 1}">`
-                : "";
-        }
-
-        // Função para definir as cores dinamicamente
-        function getColor(index) {
-            const colors = [
-                "#ffd414", "#1ec2d8", "#ff1493", "#C8A2D0", "#147aff",
-                "#7FDBFF", "#147aff", "#144bff", "#1ec2d8", "#1ec2d8"
-            ];
-            return colors[index] || "#000";
-        }
+    // Atualiza os resultados a cada 1 segundo
+    setInterval(fetchResults, 1000);
+    window.onload = fetchResults;
     </script>
 </head>
 <body>
@@ -119,16 +139,9 @@
     <p>Te amo muito! 💕</p>
 
     <!-- Contêiner para os resultados dinâmicos -->
-    <div id="results">
-        {% for index, result in results %}
-            <div>
-                <h3 style="color:  colors[index] ">{{ titles[index] }}</h3>
-                <img src="{{ url_for('static', filename='images/' + images[index]) }}" alt="Imagem {{ index + 1 }}">
-                <div><span style="font-size: 20px; color: #ff4500;">{{ result[1] }}</span></div>
-            </div>
-        {% endfor %}
-    </div>
+    <div id="results"></div>
 
     <a href="/" style="color: #db7093; font-size: 20px;">Clique para voltar</a>
 </body>
 </html>
+"pronto"
