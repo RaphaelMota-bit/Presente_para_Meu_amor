@@ -6,11 +6,11 @@ import os
 
 app = Flask(__name__)
 
-caminho = r"C:\Users\rapha\Desktop\Presente_para_Meu_amor\app"
-# nome_do_arquivo = "eventos.json"
-caminho_para_Arquivo = os.path.join(caminho, "eventos.json")
+# Caminho seguro até o arquivo JSON, relativo à pasta do app.py
+caminho_para_arquivo = os.path.join(os.path.dirname(__file__), 'eventos.json')
 
-with open(caminho_para_Arquivo, 'r' , encoding= 'utf-8') as file:
+# Carregar os eventos
+with open(caminho_para_arquivo, 'r', encoding='utf-8') as file:
     events = json.load(file)
 
 def calculate_time_difference(event_date):
@@ -50,12 +50,11 @@ def surpresa_data():
     for event in events:
         time_diff = calculate_time_difference(event['date'])
         results.append({
-            "title": event['title'],       # nome correto
-            "images": event['images'],     # 👈 aqui estava o problema!
-            "time": time_diff              # nome correto
+            "title": event['title'],
+            "images": event['images'],
+            "time": time_diff
         })
     return jsonify(results)
-
 
 if __name__ == '__main__':
     app.run(debug=True)
