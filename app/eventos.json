@@ -73,5 +73,15 @@
         "title": "O sonho continua:",
         "date": "07/04/2025 20:47",
         "images": ["sonho_continua_2.jpg", "sonho_continua_3.jpg" , "sonho_continua_4.jpg"]
+    },
+    {
+        "title": "1º ano da minha felicidade",
+        "date": "17/05/2025 00:00",
+        "images": ["1_ano_3.jpeg", "1_ano_2.jpeg" , "1_ano_1.jpeg",  "1_ano_4.jpeg"]
+    },
+    {
+        "title": "Nosso Junho",
+        "date": "12/06/2025 00:00",
+        "images": ["dia_dos_namorados_1.jpg", "dia_dos_namorados_2.jpg" , "dia_dos_namorados_3.jpg",  "dia_dos_namorados_4.jpg"]
     }
 ]
